@@ -1,0 +1,13 @@
+prefect==2.19.8
+requests==2.31.0
+pandas==2.2.2
+sqlalchemy==2.0.32
+psycopg2-binary==2.9.9
+loguru==0.7.2
+dbt-core==1.7.13
+dbt-postgres==1.7.13
+great-expectations==0.18.12
+pyyaml==6.0.2
+griffe<0.45
+
+pydantic==2.11.3

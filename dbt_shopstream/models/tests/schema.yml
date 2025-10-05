@@ -1,0 +1,22 @@
+version: 2
+models:
+  - name: dim_users
+    tests:
+      - unique:
+          column_name: user_key
+      - not_null:
+          column_name: user_key
+  - name: dim_products
+    tests:
+      - unique:
+          column_name: product_key
+      - not_null:
+          column_name: product_key
+  - name: fact_orders
+    tests:
+      - not_null:
+          column_name: order_key
+  - name: fact_order_items
+    tests:
+      - not_null:
+          column_name: order_item_key

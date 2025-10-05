@@ -1,0 +1,27 @@
+name: 'dbt_shopstream'
+version: '1.0.0'
+config-version: 2
+profile: 'shopstream'
+
+model-paths: ["models"]
+seed-paths: ["seeds"]
+test-paths: ["tests"]
+analysis-paths: ["analysis"]
+macro-paths: ["macros"]
+
+target-path: "target"
+clean-targets:
+    - "target"
+    - "dbt_packages"
+    - "logs"
+
+models:
+  dbt_shopstream:
+    staging:
+      +materialized: view
+      +schema: staging
+      +tags: ["staging"]
+    marts:
+      +materialized: table
+      +schema: mart
+      +tags: ["mart"]
