@@ -70,3 +70,5 @@ great_expectations/validations/
 # Prefect
 .prefect/
 prefect.yaml
+# Playwright MCP
+.playwright-mcp/
