@@ -1,0 +1,27 @@
+version: 2
+
+models:
+  - name: stg_users
+    description: One row per user, cleaned.
+    columns:
+      - name: id_src
+        tests: [unique, not_null]
+  - name: stg_products
+    description: One row per product, cleaned.
+    columns:
+      - name: id_src
+        tests: [unique, not_null]
+  - name: stg_orders
+    description: One row per order. Order dates are synthetic when the source has none.
+    columns:
+      - name: id_src
+        tests: [unique, not_null]
+      - name: order_date
+        tests: [not_null]
+      - name: order_date_is_synthetic
+        description: True when order_date was derived from the order id, not supplied by the source.
+  - name: stg_order_items
+    description: One row per product within an order.
+    tests:
+      - unique_combination:
+          columns: [order_id_src, product_id_src]

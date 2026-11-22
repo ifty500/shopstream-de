@@ -1,0 +1,59 @@
+version: 2
+
+models:
+  - name: dim_users
+    description: Customer dimension.
+    columns:
+      - name: user_key
+        tests: [unique, not_null]
+
+  - name: dim_products
+    description: Product dimension.
+    columns:
+      - name: product_key
+        tests: [unique, not_null]
+
+  - name: dim_date
+    description: Calendar dimension from 2022-01-01 to today.
+    columns:
+      - name: date_key
+        tests: [unique, not_null]
+
+  - name: fact_orders
+    description: One row per order.
+    columns:
+      - name: order_key
+        tests: [unique, not_null]
+      - name: user_key
+        description: DummyJSON carts may reference user ids outside the users endpoint, so this is a warning, not an error.
+        tests:
+          - relationships:
+              to: ref('dim_users')
+              field: user_key
+              config: {severity: warn}
+      - name: order_date_key
+        tests:
+          - not_null
+          - relationships:
+              to: ref('dim_date')
+              field: date_key
+      - name: discounted_total
+        tests: [not_null]
+
+  - name: fact_order_items
+    description: One row per product within an order.
+    columns:
+      - name: order_item_key
+        tests: [unique, not_null]
+      - name: order_key
+        tests:
+          - relationships:
+              to: ref('fact_orders')
+              field: order_key
+      - name: product_key
+        description: Carts can contain product ids outside the products endpoint, so this is a warning.
+        tests:
+          - relationships:
+              to: ref('dim_products')
+              field: product_key
+              config: {severity: warn}

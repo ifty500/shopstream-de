@@ -5,8 +5,11 @@ WITH dates AS (
 SELECT
   TO_CHAR(date, 'YYYYMMDD')::int AS date_key,
   date,
-  EXTRACT(YEAR FROM date)::int AS year,
-  EXTRACT(MONTH FROM date)::int AS month,
-  EXTRACT(DAY FROM date)::int AS day,
-  EXTRACT(DOW FROM date)::int AS weekday
+  EXTRACT(YEAR FROM date)::int    AS year,
+  EXTRACT(QUARTER FROM date)::int AS quarter,
+  EXTRACT(MONTH FROM date)::int   AS month,
+  TO_CHAR(date, 'Mon')            AS month_name,
+  EXTRACT(DAY FROM date)::int     AS day,
+  EXTRACT(ISODOW FROM date)::int  AS weekday,       -- 1 = Monday
+  EXTRACT(ISODOW FROM date) >= 6  AS is_weekend
 FROM dates

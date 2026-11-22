@@ -19,7 +19,7 @@ models:
   dbt_shopstream:
     staging:
       +materialized: view
-      +schema: staging
+      +schema: stg
       +tags: ["staging"]
     marts:
       +materialized: table

@@ -1,0 +1,30 @@
+version: 2
+
+sources:
+  - name: raw
+    description: Landing tables loaded by the Prefect pipeline from the DummyJSON API.
+    schema: raw
+    tables:
+      - name: users
+        columns:
+          - name: id_src
+            tests: [unique, not_null]
+      - name: products
+        columns:
+          - name: id_src
+            tests: [unique, not_null]
+      - name: orders
+        description: DummyJSON carts, treated as orders.
+        columns:
+          - name: id_src
+            tests: [unique, not_null]
+          - name: user_id_src
+            tests: [not_null]
+      - name: order_items
+        columns:
+          - name: order_id_src
+            tests:
+              - not_null
+              - relationships:
+                  to: source('raw', 'orders')
+                  field: id_src
