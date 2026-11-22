@@ -2,11 +2,15 @@ from .common import paged_get
 
 BASE = "https://dummyjson.com"
 
+
 def iter_users():
-    yield from paged_get(f"{BASE}/users")
+    yield from paged_get(f"{BASE}/users", "users")
+
 
 def iter_products():
-    yield from paged_get(f"{BASE}/products")
+    yield from paged_get(f"{BASE}/products", "products")
+
 
 def iter_carts():
-    yield from paged_get(f"{BASE}/carts")
+    """DummyJSON carts are treated as orders."""
+    yield from paged_get(f"{BASE}/carts", "carts")

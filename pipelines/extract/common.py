@@ -1,24 +1,26 @@
 import time
-import requests
-from typing import Iterator, Dict, Any
+from typing import Any, Dict, Iterator
 
-def paged_get(url: str, page_param: str = "skip", limit: int = 100) -> Iterator[Dict[str, Any]]:
+import requests
+
+
+def paged_get(url: str, items_key: str, limit: int = 100, pause: float = 0.2) -> Iterator[Dict[str, Any]]:
+    """Yield every record from a DummyJSON-style paginated endpoint.
+
+    DummyJSON responses look like {"<items_key>": [...], "total": N, "skip": S, "limit": L}.
+    """
     skip = 0
     while True:
-        resp = requests.get(url, params={"limit": limit, page_param: skip}, timeout=30)
+        resp = requests.get(url, params={"limit": limit, "skip": skip}, timeout=30)
         resp.raise_for_status()
         data = resp.json()
-        items_key = None
-        for k in ("users","products","carts"):
-            if k in data:
-                items_key = k
-                break
-        if items_key is None:
-            break
+        if items_key not in data:
+            raise ValueError(f"Unexpected response from {url}: no '{items_key}' key")
+
         items = data[items_key]
-        if not items:
+        yield from items
+
+        skip += len(items)
+        if not items or skip >= data.get("total", 0):
             break
-        for it in items:
-            yield it
-        skip += limit
-        time.sleep(0.2)
+        time.sleep(pause)
